@@ -13,6 +13,11 @@ export interface IJob {
 
 export interface IEditItem {
 	title: string;
+	company: string;
+	url: string;
+	description: string;
+	skillList: string;
+	todo: string;
 }
 
 export interface ISkill {
