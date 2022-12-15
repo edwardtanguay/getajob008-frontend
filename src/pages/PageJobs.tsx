@@ -1,6 +1,8 @@
+import React from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../appContext';
 import { JobDisplay } from '../components/JobDisplay';
+import { JobEdit } from '../components/JobEdit';
 import { IJob, ISkill } from '../interfaces';
 
 export const PageJobs = () => {
@@ -12,7 +14,13 @@ export const PageJobs = () => {
 				<h2>There are {jobs.length} jobs:</h2>
 				{jobs.map((job: IJob) => {
 					return (
-						<JobDisplay job={job} />
+						<React.Fragment key={job.id}>
+							{job.userIsEditing ? (
+								<JobEdit job={job} />
+							) : (
+								<JobDisplay job={job} />
+							)}
+						</React.Fragment>
 					);
 				})}
 			</div>

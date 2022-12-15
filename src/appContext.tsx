@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createContext } from 'react';
 import axios from 'axios';
-import { IJob, ITodo, ISkillTotal } from './interfaces';
+import { IJob, ITodo, ISkillTotal, IBackendJob } from './interfaces';
 
 interface IAppContext {
 	jobs: IJob[];
@@ -24,7 +24,16 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [skillTotals, setSkillTotals] = useState<ISkillTotal[]>([]);
 
 	const loadJobs = async () => {
-		setJobs((await axios.get(`${backendUrl}/jobs`)).data);
+		const rawJobs = (await axios.get(`${backendUrl}/jobs`)).data;
+		const _jobs: IJob[] = [];
+		rawJobs.forEach((rawJob: IBackendJob) => {
+			const _job: IJob = {
+				...rawJob,
+				userIsEditing: true
+			}
+			_jobs.push(_job);
+		});
+		setJobs(_jobs);
 	};
 	const loadTodos = async () => {
 		(async () => {
