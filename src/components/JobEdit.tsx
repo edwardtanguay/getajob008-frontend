@@ -7,7 +7,11 @@ interface IProps {
 }
 
 export const JobEdit = ({ job }: IProps) => {
-	const { handleChangeFormField, handleToggleEditStatus } = useContext(AppContext);
+	const {
+		handleChangeFormField,
+		handleToggleEditStatus,
+		handleSaveEditedJob,
+	} = useContext(AppContext);
 
 	return (
 		<form>
@@ -113,10 +117,18 @@ export const JobEdit = ({ job }: IProps) => {
 					</div>
 				</div>
 				<div className="buttonRow">
-					<button onClick={() => handleToggleEditStatus(job)}>
+					<button
+						type="button"
+						onClick={() => handleToggleEditStatus(job)}
+					>
 						Cancel
 					</button>
-					<button disabled>Save</button>
+					<button
+						type="button"
+						onClick={() => handleSaveEditedJob(job)}
+					>
+						Save
+					</button>
 				</div>
 			</fieldset>
 		</form>
