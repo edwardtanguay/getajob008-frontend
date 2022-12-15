@@ -1,0 +1,5 @@
+- tickets
+	- fix bug: 
+		- how it is: when you edit job, change a field, click cancel, and edit again, your changes are still there
+		- how it should be: changes should be reset
+		- notes: appContext: add originalItem

@@ -15,6 +15,7 @@ interface IAppContext {
 		job: IJob,
 		fieldIdCode: string
 	) => void;
+	handleToggleEditStatus: (job: IJob) => void;
 }
 
 interface IAppProvider {
@@ -37,13 +38,13 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				...rawJob,
 				userIsEditing: false,
 				editItem: {
-					title: rawJob.title, 
+					title: rawJob.title,
 					company: rawJob.company,
-					url: rawJob.url, 
+					url: rawJob.url,
 					description: rawJob.description,
 					skillList: rawJob.skillList,
-					todo: rawJob.todo
-				},
+					todo: rawJob.todo,
+				}
 			};
 			_jobs.push(_job);
 		});
@@ -120,8 +121,17 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		setJobs([...jobs]);
 	};
 
-	const handleChangeFormField = (value: string, job: IJob, fieldIdCode: string) => {
+	const handleChangeFormField = (
+		value: string,
+		job: IJob,
+		fieldIdCode: string
+	) => {
 		job.editItem[fieldIdCode as keyof IEditItem] = value;
+		setJobs([...jobs]);
+	};
+
+	const handleToggleEditStatus = (job: IJob) => {
+		job.userIsEditing = !job.userIsEditing;
 		setJobs([...jobs]);
 	}
 
@@ -135,6 +145,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				handleDeleteJob,
 				handleEditJob,
 				handleChangeFormField,
+				handleToggleEditStatus,
 			}}
 		>
 			{children}
