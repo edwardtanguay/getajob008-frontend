@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createContext } from 'react';
 import axios from 'axios';
-import { IJob, ITodo, ISkillTotal, IBackendJob } from './interfaces';
+import { IJob, ITodo, ISkillTotal, IBackendJob, IEditItem } from './interfaces';
 
 interface IAppContext {
 	jobs: IJob[];
@@ -10,6 +10,11 @@ interface IAppContext {
 	handleToggleSkillTotal: (skillTotal: ISkillTotal) => void;
 	handleDeleteJob: (job: IJob) => void;
 	handleEditJob: (job: IJob) => void;
+	handleChangeFormField: (
+		value: string,
+		job: IJob,
+		fieldIdCode: string
+	) => void;
 }
 
 interface IAppProvider {
@@ -30,8 +35,11 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		rawJobs.forEach((rawJob: IBackendJob) => {
 			const _job: IJob = {
 				...rawJob,
-				userIsEditing: false
-			}
+				userIsEditing: false,
+				editItem: {
+					title: '',
+				},
+			};
 			_jobs.push(_job);
 		});
 		setJobs(_jobs);
@@ -48,7 +56,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			await axios.get(`${backendUrl}/skillTotals`)
 		).data;
 		_skillTotals.sort(
-			(a: ISkillTotal, b: ISkillTotal) => Number(b.total) - Number(a.total)
+			(a: ISkillTotal, b: ISkillTotal) =>
+				Number(b.total) - Number(a.total)
 		);
 		_skillTotals.forEach((_skillTotal) => {
 			_skillTotal.isOpen = false;
@@ -104,6 +113,11 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const handleEditJob = (job: IJob) => {
 		job.userIsEditing = !job.userIsEditing;
 		setJobs([...jobs]);
+	};
+
+	const handleChangeFormField = (value: string, job: IJob, fieldIdCode: string) => {
+		job.editItem[fieldIdCode as keyof IEditItem] = value;
+		setJobs([...jobs]);
 	}
 
 	return (
@@ -114,7 +128,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				skillTotals: skillTotals,
 				handleToggleSkillTotal: handleToggleSkillTotal,
 				handleDeleteJob,
-				handleEditJob
+				handleEditJob,
+				handleChangeFormField,
 			}}
 		>
 			{children}
