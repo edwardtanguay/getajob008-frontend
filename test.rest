@@ -1,0 +1,10 @@
+@url = http://localhost:3011
+
+### base route
+{{url}}
+
+### jobs
+{{url}}/jobs
+
+### delete a job
+DELETE {{url}}/jobs/3 
